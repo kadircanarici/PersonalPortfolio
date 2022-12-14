@@ -41,6 +41,7 @@
                             <th>TitleMidLine</th>
                             <th>TitleEnd</th>
                             <th>Content</th>
+                            <th>İşlemler</th>
 
                         </tr>
                     </thead>
@@ -101,22 +102,26 @@
     <script src="~/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
 
     <script type="text/javascript">
-    var dataTable= $("datatable-buttons").DataTable({
-        lengthChange:!1,
-        buttons: ["copy", "excel", "pdf", "colvis"],
-        ajax:"@Url.Action("GetAll")",
-        columns:[
-            {data:'titleStart'},
-            {data:'titleMidLine'},
-            {data:'titleEnd'},
-            {data:'content'},
-            {
-                data:'id',
-                render:function(data,type)
-                {
-                        return `<a onClick="deleteSlideTextType('${data}')" class="btn btn-danger"> Sil </a> <a onClick="editSlideTextType('${data}')" class="btn btn-info">Düzenle</a>`;
-                }
-            }
-        ]
-    });   
+    var dataTable= $("#datatable-buttons").DataTable(
+        {
+            lengthChange:!1,
+            buttons: ["copy", "excel", "pdf", "colvis"],
+            ajax:"@Url.Action("GetAll","Intro")",
+            columns:[
+                    {data:'titleStart'},
+                    {data:'titleMidLine'},
+                    {data:'titleEnd'},
+                    {data:'content'},
+                    {
+                        data:'id',
+                        render:function(data,type)
+                        {
+                        return `<a onClick="editIntro('${data}')" class="btn btn-info">Düzenle</a>`;
+                        }
+                    }
+            ]
+        }
+    );
+    
     </script>
+    }

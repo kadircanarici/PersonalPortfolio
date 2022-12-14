@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PersonalPortfolio.Data;
+using PersonalPortfolio.Models;
 
 namespace PersonalPortfolio.Areas.Admin.Controllers
 {
@@ -15,6 +16,16 @@ namespace PersonalPortfolio.Areas.Admin.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+        public IActionResult GetAll()
+        {
+            List<Intro> intros = _db.Intros.Where(i => i.IsActive == true && i.IsDeleted == false).ToList<Intro>();
+            return Json(new { data = intros });
+        }
+        public IActionResult GetByID(Intro intro)
+        {
+            var result=_db.Intros.Where(i => i.IsActive == true && i.IsDeleted == false && i.Id==intro.Id);
+            return Json(result);
         }
     }
 }
