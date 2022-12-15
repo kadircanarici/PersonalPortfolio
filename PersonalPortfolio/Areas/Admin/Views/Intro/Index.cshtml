@@ -28,8 +28,7 @@
         <div class="card">
             <div class="card-body">
 
-                <h4 class="card-title">Intro</h4>
-                <button type="button" id="yeniKayit" class="btn btn-success waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#modal">Yeni Ekle</button>
+                
                 <p class="card-title-desc">
                     Bu ekranda Introyu düzenleyeblirsiniz.
                 </p>
@@ -69,16 +68,34 @@
             </div>
             <div class="modal-body">
                 <div class="mb-3 row">
-                    <label for="example-text-input" class="col-md-4 col-form-label">Yazı Türü Adı</label>
+                    <label for="example-text-input" class="col-md-4 col-form-label">txtTitleStart</label>
                     <div class="col-md-8">
-                        <input class="form-control" type="text" placeholder="Yazı türü adını giriniz" id="txtYaziTuruAdi">
+                        <input class="form-control" type="text" placeholder="txtTitleStart" id="txtTitleStart">
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="example-text-input" class="col-md-4 col-form-label"><u>txtTitleMidLine</u></label>
+                    <div class="col-md-8">
+                        <input class="form-control" type="text" placeholder="txtTitleMidLine" id="txtTitleMidLine">
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="example-text-input" class="col-md-4 col-form-label">txtTitleEnd</label>
+                    <div class="col-md-8">
+                        <input class="form-control" type="text" placeholder="txtTitleEnd" id="txtTitleEnd">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Content</label>
+                    <div>
+                        <textarea required class="form-control" rows="5" id="txtContent"></textarea>
                     </div>
                 </div>
 
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-light waves-effect" data-bs-dismiss="modal">Kapat</button>
-                <button type="button" id="btnEkle" class="btn btn-primary waves-effect waves-light">Ekle</button>
+                <button type="button" id="btnEdit" class="btn btn-primary waves-effect waves-light">Ekle</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -122,6 +139,45 @@
             ]
         }
     );
+    function editIntro(id){
+        $("#modal").modal('show');
+        console.log("edit e tıklandı");
+        var veri={id:id};
+        $.ajax({
+            type:"POST",
+            data:veri,
+            url:"@Url.Action("GetByID","Intro")",
+            success:function(res){
+                $("#txtTitleStart").val(res.titleStart);
+                console.log(res.id);
+                $("#txtTitleMidLine").val(res.titleMidLine);
+                $("#txtTitleEnd").val(res.titleEnd);
+                $("#txtContent").val(res.content);
+                $("#btnEdit").click(function(){
+                    var veri=
+                    {
+                        id:id,
+                        titleStart:$("#txtTitleStart").val(),
+                        titleMidLine:$("#txtTitleMidLine").val(),
+                        titleEnd:$("#txtTitleEnd").val(),
+                        content: $("#txtContent").val(),
+                    };
+                    console.log(veri);
+                    $.ajax({
+                        type:"POST",
+                        url:"@Url.Action("Edit","Intro")",
+                        data:veri,
+                        success:function(res){
+                            dataTable.ajax.reload();
+                            toastr.success('Intro basarıyla güncellendi','Düzenlendi !');
+                            $("#modal").modal('hide');
+                        }
+                    });
+                })
+
+            }
+        });
+    }
     
     </script>
     }

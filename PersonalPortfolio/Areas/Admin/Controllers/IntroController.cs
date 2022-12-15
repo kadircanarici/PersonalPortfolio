@@ -22,10 +22,25 @@ namespace PersonalPortfolio.Areas.Admin.Controllers
             List<Intro> intros = _db.Intros.Where(i => i.IsActive == true && i.IsDeleted == false).ToList<Intro>();
             return Json(new { data = intros });
         }
-        public IActionResult GetByID(Intro intro)
+        public IActionResult GetByID(Guid id)
         {
-            var result=_db.Intros.Where(i => i.IsActive == true && i.IsDeleted == false && i.Id==intro.Id);
-            return Json(result);
+            Intro intro = _db.Intros.Find(id);
+            return Json(intro);
+        }
+        [HttpPost]
+        public IResult Edit(Intro intro)
+        {
+            Intro asil = _db.Intros.Find(intro.Id);
+            asil.TitleStart = intro.TitleStart;
+            asil.TitleMidLine = intro.TitleMidLine;
+            asil.TitleEnd = intro.TitleEnd;
+            asil.Content = intro.Content;
+
+            _db.Intros.Update(asil);
+            _db.SaveChanges();
+
+            return Results.Ok("basarılı");
+
         }
     }
 }
