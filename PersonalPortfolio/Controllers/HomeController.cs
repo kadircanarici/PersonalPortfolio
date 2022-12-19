@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PersonalPortfolio.Data;
 using PersonalPortfolio.Models;
 using System.Diagnostics;
 
@@ -6,13 +7,25 @@ namespace PersonalPortfolio.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly ApplicationDbContext _db;
+        public HomeController(ApplicationDbContext db)
         {
-            _logger = logger;
+            _db = db;
+        }
+        public IActionResult GetIntros()
+        {
+            List<Intro> Intros = _db.Intros.ToList();
+            return Json(Intros);
         }
 
+
+
+
+
+
+
+
+        
         public IActionResult Index()
         {
             return View();
