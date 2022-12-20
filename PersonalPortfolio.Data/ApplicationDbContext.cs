@@ -12,7 +12,7 @@ namespace PersonalPortfolio.Data
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext>options):base(options) { }
         public DbSet<Intro> Intros { get; set; }
-
+        public DbSet<IntroPhoto> IntroPhoto { get; set; }
 
 
 
