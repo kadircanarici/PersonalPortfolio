@@ -1,4 +1,6 @@
-﻿<div class="row">
+﻿
+
+<div class="row">
     <div class="col-12">
         <div class="page-title-box d-flex align-items-center justify-content-between">
             <h4 class="mb-0">Intro</h4>
@@ -21,7 +23,7 @@
 
 
                 <p class="card-title-desc">
-                    Bu ekranda Intro Photoyu düzenleyebilirsiniz.
+                    Bu ekranda Intro Photoyu düzenleyebilirsiniz. Boyutları 567x566 olmalıdır.
                 </p>
                 <div class="container">
 
@@ -30,17 +32,18 @@
                     <div class="mb-3 row">
                         <label for="inputFile" class="col-4 col-form-label">Profile Picture</label>
                         <div class="col-8">
-                            <input type="file" class="form-control" name="inputFile" id="imgFile" placeholder="Select an image">
+                            <input type="file" disabled class="form-control" name="inputFile" id="imgFile" placeholder="Select an image">
                         </div>
                     </div>
                     <div class="mb-3 row">
                         <label for="inputName" class="col-4 col-form-label">Title</label>
                         <div class="col-8">
-                            <input type="text" class="form-control" id="txtTitle" placeholder="Title">
+                            <input type="text" disabled class="form-control" id="txtTitle" placeholder="Title">
                         </div>
                     </div>
-   
 
+                    <button type="button" id="btnConfirmEditCancel" class="btn btn-primary waves-effect waves-light">Güncelle</button>
+                    <button type="button" id="btnSave" class="btn btn-primary waves-effect waves-light">Kaydet</button>
 
                 </div>
             </div>
@@ -48,8 +51,112 @@
 
     </div> <!-- end col -->
 </div> <!-- end row -->
+@section Scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function (){
+            $.ajax({
+                url: "@Url.Action("Get","IntroPhoto")",
+                type: "GET",
+                success: function (data) {
+                    console.log(data)
+                   $("#imgProfile").attr('src', data.imagePath);
+                  
+                }
+            }); 
+        });
+
+        $("#btnConfirmEditCancel").click(function () {
+            $.ajax({
+                url: "@Url.Action("Get","IntroPhoto")",
+                type: "GET",
+                success: function (data) {
+                    $("#btnConfirmEditCancel").text('İptal');
+                    $("#imgFile").prop('disabled', false);
+                    $("#txtTitle").prop('disabled', false);
+                    $("#txtTitle").val(data.title);
+                    $("#btnConfirmEditCancel").off();
+                    $("#btnConfirmEditCancel").click(function () {
+                        $("#imgFile").prop('disabled', true);
+                        $("#txtTitle").prop('disabled', true);
+                        $("#btnConfirmEditCancel").text('Güncelle');
+                        $("#txtTitle").val("");
+                        
+                    });
+                    var veri = { id: data.id }
+                    $("#btnSave").click(function () {
+                        
+                        $.ajax({
+                            url: "@Url.Action("Edit","IntroPhoto")",
+                            type: "POST",
+                            data:veri,
+                            success: function (data) {
+                                $("#btnConfirmEditCancel").text('İptal');
+                                $("#imgFile").prop('disabled', false);
+                                $("#txtTitle").prop('disabled', false);
+                                $("#txtTitle").val(data.title);
+                                $("#btnConfirmEditCancel").off();
+                                $("#btnConfirmEditCancel").click(function () {
+                                    $("#imgFile").prop('disabled', true);
+                                    $("#txtTitle").prop('disabled', true);
+                                    $("#btnConfirmEditCancel").text('Güncelle');
+                                    $("#txtTitle").val("");
+
+                                });
+                            }
+                        }); 
+                    }); 
+                }
+            });
+        });
+
+        //function loadImage(){
+        //            var file = $("#file").prop('files')[0];
+        //            var reader = new FileReader();
+        //            reader.readAsDataURL(file);
+        //            reader.onload = function () {
+        //              $("#imgProfile").attr('src', reader.result);
+        //                var veri = {
+        //                    imagePath: reader.result,
+        //                    order: $("#txtOrder").val(),
+
+        //                };
+        //}
+
+                //$("#btnSlideEkle").click(function () {
+
+                //        var file = $("#file").prop('files')[0];
+                //        var reader = new FileReader();
+                //        reader.readAsDataURL(file);
+                //        reader.onload = function () {
+                //          $("#imgProfile").attr('src', reader.result);
+                //            var veri = {
+                //                imagePath: reader.result,
+                //                order: $("#txtOrder").val(),
+
+                //            };
+
+                //            $.ajax({
+                //                type: "POST",
+                //                url: "@Url.Action("AddSlide","Slide")",
+                //                data: veri,
+                //                success: function (res) {
+                //                    $("#modalSlide").modal("hide");
+                //                    DataTable.ajax.reload();
+
+                //                }
+
+                //            })
+
+                //        };
+
+                //    });
 
 
+
+    </script>
+
+}
 
 
 

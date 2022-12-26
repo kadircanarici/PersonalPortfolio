@@ -26,15 +26,15 @@
 
 
 					<div class="p-relative" id="introPhoto">
-						<img src="img/demos/personal-portfolio-1/generic/generic-1.jpg" class="img-fluid rounded-circle p-relative z-index-1 appear-animation" alt="" data-appear-animation="fadeIn" data-appear-animation-delay="200" />
+						<img id="portfolioPicture" class="img-fluid rounded-circle p-relative z-index-1 appear-animation" alt="" data-appear-animation="fadeIn" data-appear-animation-delay="200" />
 						<div class="appear-animation p-relative z-index-2" data-appear-animation="fadeIn" data-appear-animation-delay="1000">
 							<div class="p-absolute d-inline-block w-100 rotate-animation custom-curved-text-1">
 								<!-- Curved Text Generator: https://suncatcherstudio.com/curved-text-generator/ -->
 								<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 									<path id="curvedText1" fill="none" stroke="none"
 										  d="M 32.550491,148.48008 A -108.15144,-108.15144 0 0 1 140.70194,40.328644 -108.15144,-108.15144 0 0 1 248.85338,148.48008 -108.15144,-108.15144 0 0 1 140.70194,256.63153 -108.15144,-108.15144 0 0 1 32.550491,148.48008 Z" />
-									<text font-size="29" fill="#1c1c1c" letter-spacing="3" font-family="sans-serif" font-weight="bold">
-										<textPath xlink:href="#curvedText1" side="left" startOffset="5" id="titleTextPath">ART DIRECTOR AND DIGITAL DESIGNER  </textPath>
+									<text  font-size="29" fill="#1c1c1c" letter-spacing="3" font-family="sans-serif" font-weight="bold">
+										<textPath id="titleTextPath" xlink:href="#curvedText1" side="left" startOffset="5"> hhh</textPath>
 									</text>
 								</svg>
 							</div>
@@ -288,10 +288,18 @@
 @section Scripts{
 	<script src="~/js/Home/Intro.js" type="text/javascript"></script>
 	<script type="text/javascript">
-		$("#document").ready({
-
-		})
-
+		$(document).ready(function (){
+            $.ajax({
+				url: "@Url.Action("Get","IntroPhoto",new { Area = "Admin"})",
+                type: "GET",
+                success: function (data) {
+                    console.log(data)
+					$("#portfolioPicture").attr('src', data.imagePath);
+					$("#titleTextPath").html(data.title);
+                  
+                }
+            }); 
+        });
 
 
 
