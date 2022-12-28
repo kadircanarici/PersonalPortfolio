@@ -70,25 +70,25 @@
                 <div class="mb-3 row">
                     <label for="example-text-input" class="col-md-4 col-form-label">txtTitleStart</label>
                     <div class="col-md-8">
-                        <input class="form-control" type="text" placeholder="txtTitleStart" id="txtTitleStart">
+                        <input class="form-control" type="text" placeholder="txtTitle" id="txtTitleStart">
                     </div>
                 </div>
                 <div class="mb-3 row">
                     <label for="example-text-input" class="col-md-4 col-form-label"><u>txtTitleMidLine</u></label>
                     <div class="col-md-8">
-                        <input class="form-control" type="text" placeholder="txtTitleMidLine" id="txtTitleMidLine">
+                        <input class="form-control" type="text" placeholder="txtDescription" id="txtTitleMidLine">
                     </div>
                 </div>
                 <div class="mb-3 row">
                     <label for="example-text-input" class="col-md-4 col-form-label">txtTitleEnd</label>
                     <div class="col-md-8">
-                        <input class="form-control" type="text" placeholder="txtTitleEnd" id="txtTitleEnd">
+                        <input class="form-control" type="text" placeholder="txtImg" id="txtTitleEnd">
                     </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Content</label>
                     <div>
-                        <textarea required class="form-control" rows="5" id="txtContent"></textarea>
+                        <textarea required class="form-control" rows="5" id="txtCurved"></textarea>
                     </div>
                 </div>
 
@@ -125,50 +125,50 @@
                 buttons: ["copy", "excel", "pdf", "colvis"],
                 ajax: "@Url.Action("GetAll","Intro")",
                 columns: [
-                    { data: 'titleStart' },
-                    { data: 'titleMidLine' },
-                    { data: 'titleEnd' },
-                    { data: 'content' },
+                    { data: 'title' },
+                    { data: 'description' },
+                    { data: 'imagePath' },
+                    { data: 'curvedText' },
                     {
                         data: 'id',
                         render: function (data, type) {
-                            return `<a onClick="editIntro('${data}')" class="btn btn-info">Düzenle</a>`;
+                            return `<a onClick="editAboutMe('${data}')" class="btn btn-info">Düzenle</a>`;
                         }
                     }
                 ]
             }
         );
-        function editIntro(id) {
+        function editAboutMe(id) {
             $("#modal").modal('show');
             console.log("edit e tıklandı");
             var veri = { id: id };
             $.ajax({
                 type: "POST",
                 data: veri,
-                url: "@Url.Action("GetByID","Intro")",
+                url: "@Url.Action("GetByID","AboutMe")",
                 success: function (res) {
-                    $("#txtTitleStart").val(res.titleStart);
+                    $("#txtDescription").val(res.titleStart);
                     console.log(res.id);
-                    $("#txtTitleMidLine").val(res.titleMidLine);
-                    $("#txtTitleEnd").val(res.titleEnd);
-                    $("#txtContent").val(res.content);
+                    $("#txtDescription").val(res.titleMidLine);
+                    $("#txtImg").val(res.titleEnd);
+                    $("#txtCurved").val(res.content);
                     $("#btnEdit").click(function () {
                         var veri =
                         {
                             id: id,
-                            titleStart: $("#txtTitleStart").val(),
-                            titleMidLine: $("#txtTitleMidLine").val(),
-                            titleEnd: $("#txtTitleEnd").val(),
-                            content: $("#txtContent").val(),
+                            titleStart: $("#txtDescription").val(),
+                            titleMidLine: $("#txtDescription").val(),
+                            titleEnd: $("#txtImg").val(),
+                            content: $("#txtCurved").val(),
                         };
                         console.log(veri);
                         $.ajax({
                             type: "POST",
-                            url: "@Url.Action("Edit","Intro")",
+                            url: "@Url.Action("Edit","AboutMe")",
                             data: veri,
                             success: function (res) {
                                 dataTable.ajax.reload();
-                                toastr.success('Intro basarıyla güncellendi', 'Düzenlendi !');
+                                toastr.success('AboutMe basarıyla güncellendi', 'Düzenlendi !');
                                 $("#modal").modal('hide');
                             }
                         });
