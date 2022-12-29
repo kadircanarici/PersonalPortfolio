@@ -142,7 +142,7 @@
     function editIntro(id){
         $("#modal").modal('show');
         console.log("edit e tıklandı");
-        var veri={id:id};
+            var veri = { id: id, imagePath: ''};
         $.ajax({
             type:"POST",
             data:veri,

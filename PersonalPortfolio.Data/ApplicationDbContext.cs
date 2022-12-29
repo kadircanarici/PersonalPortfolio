@@ -15,7 +15,7 @@ namespace PersonalPortfolio.Data
 
 
 
-        public DbSet<IntroPhoto>    introPhotos { get; set; }   
+        public DbSet<IntroPhoto> introPhotos { get; set; }   
 
 
 
