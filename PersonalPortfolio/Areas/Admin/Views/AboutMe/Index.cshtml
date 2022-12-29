@@ -70,7 +70,7 @@
                 <div class="mb-3 row">
                     <label for="example-text-input" class="col-md-4 col-form-label">txtTitle</label>
                     <div class="col-md-8">
-                        <input class="form-control" type="text" placeholder="txtTitle" id="txtTitleStart">
+                        <input class="form-control" type="text" placeholder="" id="txtTitle">
                     </div>
                 </div>
                 <div class="mb-3 row">
@@ -165,14 +165,14 @@
 
                         var photo = $("#ImgPath").prop('files')[0];
                             var reader = new FileReader();
- reader.readAsDataURL(photo);
+                            reader.readAsDataURL(photo);
                             reader.onload = function () {
                         var veri =
                         {
                             id: id,
                             title: $("#txtTitle").val(),
                             description: $("#txtDescription").val(),
-                            imagePath: $("#ImgPath").reader.result,
+                            imagePath: reader.result,
                             curvedText: $("#txtCurved").val(),
                         };
                         console.log(veri);
