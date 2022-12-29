@@ -68,27 +68,28 @@
             </div>
             <div class="modal-body">
                 <div class="mb-3 row">
-                    <label for="example-text-input" class="col-md-4 col-form-label">txtTitleStart</label>
+                    <label for="example-text-input" class="col-md-4 col-form-label">txtTitle</label>
                     <div class="col-md-8">
                         <input class="form-control" type="text" placeholder="txtTitle" id="txtTitleStart">
                     </div>
                 </div>
                 <div class="mb-3 row">
-                    <label for="example-text-input" class="col-md-4 col-form-label"><u>txtTitleMidLine</u></label>
+                    <label for="example-text-input" class="col-md-4 col-form-label"><u>Description</u></label>
                     <div class="col-md-8">
-                        <input class="form-control" type="text" placeholder="txtDescription" id="txtTitleMidLine">
+                        <input class="form-control" type="text" placeholder="" id="txtCurved">
                     </div>
                 </div>
                 <div class="mb-3 row">
-                    <label for="example-text-input" class="col-md-4 col-form-label">txtTitleEnd</label>
+                    <label for="ImgPath" class="col-md-4 col-form-label">Profil Foto (567x566): </label>
                     <div class="col-md-8">
-                        <input class="form-control" type="text" placeholder="txtImg" id="txtTitleEnd">
+                        <input type="file" id="ImgPath" accept=".jpeg,.jpg,.png">
                     </div>
                 </div>
+                
                 <div class="mb-3">
-                    <label class="form-label">Content</label>
+                    <label class="form-label">Curved</label>
                     <div>
-                        <textarea required class="form-control" rows="5" id="txtCurved"></textarea>
+                        <textarea required class="form-control" rows="5" id="txtDescription"></textarea>
                     </div>
                 </div>
 
@@ -123,11 +124,17 @@
             {
                 lengthChange: !1,
                 buttons: ["copy", "excel", "pdf", "colvis"],
-                ajax: "@Url.Action("GetAll","Intro")",
+                ajax: "@Url.Action("GetAll","AboutMe")",
                 columns: [
                     { data: 'title' },
                     { data: 'description' },
-                    { data: 'imagePath' },
+                    { data: 'imagePath' ,render:function(data){
+                            return `<div class="col-md-6">
+                                                        <div class="mt-4 mt-md-0">
+                                                            <img class="rounded-circle avatar-xl" alt="200x200" src="/${data}" data-holder-rendered="true">
+                                                        </div>
+                                                    </div>`;}
+                    },
                     { data: 'curvedText' },
                     {
                         data: 'id',
@@ -147,19 +154,26 @@
                 data: veri,
                 url: "@Url.Action("GetByID","AboutMe")",
                 success: function (res) {
-                    $("#txtDescription").val(res.titleStart);
-                    console.log(res.id);
-                    $("#txtDescription").val(res.titleMidLine);
-                    $("#txtImg").val(res.titleEnd);
-                    $("#txtCurved").val(res.content);
+                    $("#txtTitle").val(res.title);
+                    $("#txtDescription").val(res.description);
+                    $("#ImgPath").prop('src', res.imagePath);
+                    $("#txtCurved").val(res.curvedText);
                     $("#btnEdit").click(function () {
+
+
+
+
+                        var photo = $("#ImgPath").prop('files')[0];
+                            var reader = new FileReader();
+ reader.readAsDataURL(photo);
+                            reader.onload = function () {
                         var veri =
                         {
                             id: id,
-                            titleStart: $("#txtDescription").val(),
-                            titleMidLine: $("#txtDescription").val(),
-                            titleEnd: $("#txtImg").val(),
-                            content: $("#txtCurved").val(),
+                            title: $("#txtTitle").val(),
+                            description: $("#txtDescription").val(),
+                            imagePath: $("#ImgPath").reader.result,
+                            curvedText: $("#txtCurved").val(),
                         };
                         console.log(veri);
                         $.ajax({
@@ -172,7 +186,7 @@
                                 $("#modal").modal('hide');
                             }
                         });
-                    })
+                    }})
 
                 }
             });

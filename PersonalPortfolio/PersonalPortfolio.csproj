@@ -250,6 +250,7 @@
     <Folder Include="wwwroot\assets\libs\toastr\tests\" />
     <Folder Include="wwwroot\assets\libs\waypoints\src\" />
     <Folder Include="wwwroot\assets\libs\waypoints\test\" />
+    <Folder Include="wwwroot\img\aboutme\" />
   </ItemGroup>
 
 </Project>
