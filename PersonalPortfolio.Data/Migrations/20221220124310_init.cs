@@ -29,6 +29,23 @@ namespace PersonalPortfolio.Data.Migrations
                 {
                     table.PrimaryKey("PK_Intros", x => x.Id);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "introPhotos",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DateModified = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_introPhotos", x => x.Id);
+                });
         }
 
         /// <inheritdoc />
@@ -36,6 +53,9 @@ namespace PersonalPortfolio.Data.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Intros");
+
+            migrationBuilder.DropTable(
+                name: "introPhotos");
         }
     }
 }
