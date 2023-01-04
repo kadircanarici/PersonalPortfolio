@@ -25,61 +25,34 @@ namespace PersonalPortfolio.Areas.Admin.Controllers
             List<AboutMe> aboutMes=_db.AboutMe.Where(a=>a.IsActive==true && a.IsDeleted == false).ToList<AboutMe>();
             return Json(new { data = aboutMes });
         }
-        [HttpPost]
-        public IResult Edit(AboutMe aboutMe)
+        
+        public IActionResult Edit(AboutMe newPhoto)
         {
-            string _base64String;
-            AboutMe asil = _db.AboutMe.Find(aboutMe.Id);
-            if (aboutMe.ImagePath != null)
+            AboutMe asil = _db.AboutMe.Find(newPhoto.Id);
+            string filename = "";
+            if (newPhoto.ImagePath != null)
             {
-
-                try
+                if (newPhoto.ImagePath.Contains("png"))
                 {
-
-
-
-                    using (Image image = Image.FromFile(_env.ContentRootPath + "/wwwroot" + asil.ImagePath))
-                    {
-                        using (MemoryStream m = new MemoryStream())
-                        {
-                            image.Save(m, image.RawFormat);
-                            byte[] imageBytes = m.ToArray();
-
-                            // Convert byte[] to Base64 String
-                            string base64String = Convert.ToBase64String(imageBytes);
-                            _base64String = base64String;
-                        }
-                    }
+                    filename = Base64ToImageSave(newPhoto.ImagePath, newPhoto.Id + RandomStringGenerator(5) + ".png");
                 }
-                catch
+                else if (newPhoto.ImagePath.Contains("jpg") || newPhoto.ImagePath.Contains("jpeg"))
                 {
-                    _base64String = "Dosya Bulunamadı";
+                    filename = Base64ToImageSave(newPhoto.ImagePath, newPhoto.Id + RandomStringGenerator(5) + ".jpg");
                 }
+                asil.ImagePath = "img/aboutMe/" + filename;
 
-                if (asil.ImagePath != _base64String)
-                {
-                    string filename = "";
-                    if (aboutMe.ImagePath.Contains("png"))
-                    {
-                        filename = Base64ToImageSave(aboutMe.ImagePath, aboutMe.Id  + "-aboutme.png");
-                    }
-                    else if (aboutMe.ImagePath.Contains("jpg") || asil.ImagePath.Contains("jpeg"))
-                    {
-                        filename = Base64ToImageSave(aboutMe.ImagePath, aboutMe.Id + "-aboutme.jpg");
-                    }
-                    asil.ImagePath = "/img/aboutme/" + filename;
-                }
             }
+            asil.Title = newPhoto.Title;
+            asil.Description= newPhoto.Description;
+            asil.CurvedText= newPhoto.CurvedText;
 
-            asil.Title = aboutMe.Title;
-            asil.CurvedText = aboutMe.CurvedText;
-            asil.Description = aboutMe.Description;
-            asil.ImagePath = aboutMe.ImagePath;
             _db.AboutMe.Update(asil);
             _db.SaveChanges();
-            return Results.Ok("basarılı");
+
+            return Json(asil);
         }
-        
+
         public IActionResult GetById(Guid id)
         {
             AboutMe aboutMe = _db.AboutMe.Find(id);
@@ -98,13 +71,8 @@ namespace PersonalPortfolio.Areas.Admin.Controllers
                 // Convert byte[] to Image 
                 ms.Write(imageBytes, 0, imageBytes.Length);
                 Image image = Image.FromStream(ms, true);
-                if (!Directory.Exists(_env.ContentRootPath + "/wwwroot/img/aboutMe/" + name.Split("-")[0]))
-                {
-                    Directory.CreateDirectory(_env.ContentRootPath + "/wwwroot/img/aboutMe/" + name.Split("-")[0]);
-                }
 
-
-                image.Save(_env.ContentRootPath + "/wwwroot/img/aboutMe/" + name.Split("-")[0] + "/" + name);
+                image.Save(_env.ContentRootPath + "/wwwroot/img/aboutMe/" + name);
 
                 return name;
 
@@ -114,6 +82,34 @@ namespace PersonalPortfolio.Areas.Admin.Controllers
             {
                 return "0";
             }
+        }
+        public static string RandomStringGenerator(int length)
+        {
+            string randomString = "";
+            char[] upperCase = "QWERTYUIOPASDFGHJKLZXCVBNM".ToCharArray();
+            char[] lowerCase = "qwertyuiopasdfghjklzxcvbnm".ToCharArray();
+            char[] number = "1234567890".ToCharArray();
+            Random rnd = new Random();
+            for (int i = 0; i < length; i++)
+            {
+                int rndChoice = rnd.Next(1, 4);
+                if (rndChoice == 1)
+                {
+                    int upperCaseRnd = rnd.Next(0, upperCase.Length);
+                    randomString += upperCase[upperCaseRnd];
+                }
+                else if (rndChoice == 2)
+                {
+                    int lowerCaseRnd = rnd.Next(0, lowerCase.Length);
+                    randomString += lowerCase[lowerCaseRnd];
+                }
+                else
+                {
+                    int numberRnd = rnd.Next(0, number.Length);
+                    randomString += number[numberRnd];
+                }
+            }
+            return randomString;
         }
     }
 }
