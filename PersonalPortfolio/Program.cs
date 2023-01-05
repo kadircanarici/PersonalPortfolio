@@ -3,15 +3,16 @@ using Microsoft.EntityFrameworkCore;
 using PersonalPortfolio.Data;
 
 var builder = WebApplication.CreateBuilder(args);
-
 // Add services to the container.
+
 builder.Services.AddControllersWithViews();
+
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
 {
+    options.AccessDeniedPath = "/Admin/User/Login";
     options.LoginPath = "/Admin/User/Login";
 });
-
 
 var app = builder.Build();
 
@@ -23,8 +24,12 @@ if (!app.Environment.IsDevelopment())
 app.UseStaticFiles();
 
 app.UseRouting();
+
 app.UseAuthentication();
+
 app.UseAuthorization();
+
+
 app.MapControllerRoute(
            name: "areas",
            pattern: "{area:exists}/{controller=Intro}/{action=Index}/{id?}"

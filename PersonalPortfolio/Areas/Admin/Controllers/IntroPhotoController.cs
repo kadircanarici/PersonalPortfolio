@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PersonalPortfolio.Data;
 using PersonalPortfolio.Models;
+using System.Data;
 using System.Drawing;
 using System.Security.Policy;
 
@@ -17,22 +19,24 @@ namespace PersonalPortfolio.Areas.Admin.Controllers
             _db = db;
             _env = env;
         }
-
+        [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
             return View();
         }
+        [Authorize(Roles = "Admin")]
         public IActionResult Get()
         {
            List<IntroPhoto> introphotos = _db.introPhotos.Where(i => i.IsActive == true && i.IsDeleted == false).ToList<IntroPhoto>();
             return Json(new { data = introphotos });
         }
+        [Authorize(Roles = "Admin")]
         public IActionResult GetById(IntroPhoto photo)
         {
             IntroPhoto introphoto = _db.introPhotos.FirstOrDefault(i => i.Id == photo.Id);
             return Json(introphoto);
         }
-
+        [Authorize(Roles = "Admin")]
         public IActionResult Update(IntroPhoto newPhoto)
         {
             IntroPhoto asil = _db.introPhotos.Find(newPhoto.Id);

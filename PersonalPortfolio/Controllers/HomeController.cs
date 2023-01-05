@@ -17,15 +17,20 @@ namespace PersonalPortfolio.Controllers
             List<Intro> Intros = _db.Intros.ToList();
             return Json(Intros);
         }
-
-
-
-
-
-
-
-
         
+        public IActionResult GetAboutMe()
+        {
+            List<AboutMe> ab = _db.AboutMe.ToList();
+            return Json(ab);
+        }
+
+
+
+
+
+
+
+
         public IActionResult Index()
         {
             return View();

@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PersonalPortfolio.Data;
 using PersonalPortfolio.Models;
+using System.Data;
 using System.Drawing;
 
 namespace PersonalPortfolio.Areas.Admin.Controllers
@@ -15,17 +17,18 @@ namespace PersonalPortfolio.Areas.Admin.Controllers
             _db = db;
             _env = env;
         }
-        
+        [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
             return View();
         }
+        [Authorize(Roles = "Admin")]
         public IActionResult GetAll()
         {
             List<AboutMe> aboutMes=_db.AboutMe.Where(a=>a.IsActive==true && a.IsDeleted == false).ToList<AboutMe>();
             return Json(new { data = aboutMes });
         }
-        
+        [Authorize(Roles = "Admin")]
         public IActionResult Edit(AboutMe newPhoto)
         {
             AboutMe asil = _db.AboutMe.Find(newPhoto.Id);
@@ -52,7 +55,7 @@ namespace PersonalPortfolio.Areas.Admin.Controllers
 
             return Json(asil);
         }
-
+        [Authorize(Roles = "Admin")]
         public IActionResult GetById(Guid id)
         {
             AboutMe aboutMe = _db.AboutMe.Find(id);

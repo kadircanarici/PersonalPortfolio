@@ -12,3 +12,15 @@
     });
 
 
+$.ajax('Home/GetAboutMe', {
+    type: "GET",
+    success: function (data) {
+        console.log(data);
+        $("#aboutMeCurvedText").html(data[0].curvedText);
+        $("#aboutMeImagePath").attr("src", data[0].imagePath);
+        $("#aboutMeTitle").html(data[0].title);
+        $("#aboutMeDescription").html(data[0].description);
+
+
+    }
+    })

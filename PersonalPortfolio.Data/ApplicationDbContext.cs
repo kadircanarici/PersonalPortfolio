@@ -13,10 +13,8 @@ namespace PersonalPortfolio.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext>options):base(options) { }
         public DbSet<Intro> Intros { get; set; }
         public DbSet<AboutMe> AboutMe { get; set; }
-
-
-
-        public DbSet<IntroPhoto> introPhotos { get; set; }   
+         public DbSet<IntroPhoto> introPhotos { get; set; }   
+        public DbSet<User> users { get; set; }
 
 
 
