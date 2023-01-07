@@ -39,7 +39,7 @@ namespace PersonalPortfolio.Areas.Admin.Controllers
                 List<Claim> userClaims = new List<Claim>();
                 userClaims.Add(new Claim(ClaimTypes.Name,usr.UserName));  
                 userClaims.Add(new Claim(ClaimTypes.NameIdentifier,usr.Id.ToString()));
-                userClaims.Add(new Claim(ClaimTypes.Role,usr.UserName));
+                userClaims.Add(new Claim(ClaimTypes.Role,"Admin"));
 
                 var claimsIdentity = new ClaimsIdentity(userClaims, CookieAuthenticationDefaults.AuthenticationScheme);
 
