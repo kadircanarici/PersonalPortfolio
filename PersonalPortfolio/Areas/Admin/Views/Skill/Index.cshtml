@@ -122,39 +122,57 @@
                     {
                         data: 'id',
                         render: function (data, type) {
-                            return `<a onClick="editSkill('${data}')" class="btn btn-info">Düzenle</a><a onClick="deleteSkill('${data}')" class="btn btn-danger">Düzenle</a>`;
+                            return `<a onClick="editSkill('${data}')" class="btn btn-info">Düzenle</a><a onClick="deleteSkill('${data}')" class="btn btn-danger">Sil</a>`;
                         }
                     }
                 ]
             }
         );
-        function deleteSkill()
-        {
+        function deleteSkill(id) {
+            Swal.fire({
+                title: 'Silmek istediginizden emin misiniz ?',
+                showCancelButton: true,
+                confirmButtonText: 'Evet'
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
 
+                    $.post({
+                        data: { id: id },
+                        url: "@Url.Action("Delete","Skill")",
+                        success: function (res) {
+
+                            dataTable.ajax.reload();
+                            toastr.success('Yetenek Silinmiştir.', 'Silindi');
+                        }
+                    })
+
+                }
+            });
         }
+
         $("#yeniKayit").click(function () {
             $('#ddlSkillCol option[value="0"]').attr('selected', 'selected');
-            
+
             $("#btnEdit").off();
             $("#btnEdit").click(AddSkill);
             $("#btnEdit").text("Ekle");
-            
+
         });
         function AddSkill() {
             $("#modal").modal('show');
-            var veri= {
-               
-                name:$("#txtSkillName").val(),
+            var veri = {
+
+                name: $("#txtSkillName").val(),
                 column: $("#ddlSkillCol option:selected").val()
             }
-            console.log("veri :"+veri);
+            console.log("veri :" + veri);
             $.post({
-                data:veri,
-                url:"@Url.Action("Add","Skill")",
-                success:function(res)
-                {
+                data: veri,
+                url: "@Url.Action("Add","Skill")",
+                success: function (res) {
                     $("#modal").modal('hide'),
-                    toastr.success('yeni yetenek basarıyla eklenmiştir.','Başarılı');
+                        toastr.success('yeni yetenek basarıyla eklenmiştir.', 'Başarılı');
                     dataTable.ajax.reload();
                     $("#txtSkillName").val('');
                     $("#ddlSkillCol option:selected").val('');
@@ -165,9 +183,9 @@
         function editSkill(id) {
             $("#editSkill").off();
             $("#modal").modal('show');
-            var veri = { 
+            var veri = {
                 id: id,
-              
+
             };
             $.ajax({
                 type: "POST",
@@ -187,7 +205,7 @@
                             name: $("#txtSkillName").val(),
                             column: $("#ddlSkillCol option:selected").val()
                         };
-                       
+
                         $.ajax({
                             type: "POST",
                             url: "@Url.Action("Edit","Skill")",
