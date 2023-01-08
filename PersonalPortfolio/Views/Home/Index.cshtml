@@ -78,25 +78,19 @@
                     </div>
                     <div class="row mt-5 pt-4">
                         <div class="col">
-                            <h3 class="short mb-3">WEB PRESENCE</h3>
-                            <p class="text-4 font-weight-medium line-height-7 text-color-dark pe-lg-5">Lorem ipsum dolor sit amet, consectetur adipiscing elit orem ipsum dolor sit.</p>
+                            <h3 class="short mb-3">Yetenekler</h3>
+                           
 
                             <div style="display: inline-block; margin-right: 40%">
-                                <ul class="list-unstyled custom-list-1 text-3-5">
+                                <ul id="skillsCol1" class="list-unstyled custom-list-1 text-3-5">
                                     <li>Frontend Development</li>
-                                    <li>Digital Design</li>
-                                    <li>UX Design</li>
-                                    <li>UI Design</li>
-                                    <li>Graphic Elements</li>
+                                    
                                 </ul>
                             </div>
                             <div style="display: inline-block">
-                                <ul class="list-unstyled custom-list-1 text-3-5">
+                                <ul id="skillsCol2" class="list-unstyled custom-list-1 text-3-5">
                                     <li>Frontend Development</li>
-                                    <li>Digital Design</li>
-                                    <li>UX Design</li>
-                                    <li>UI Design</li>
-                                    <li>Graphic Elements</li>
+                                    
                                 </ul>
                             </div>
 
@@ -296,7 +290,6 @@
                 url: "@Url.Action("Get","IntroPhoto")",
                 type: "GET",
                 success: function (data) {
-                    console.log(data)
                     $("#portfolioPicture").attr('src', data.imagePath);
                     $("#titleTextPath").html(data.title);
 

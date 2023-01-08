@@ -23,6 +23,11 @@ namespace PersonalPortfolio.Controllers
             List<AboutMe> ab = _db.AboutMe.ToList();
             return Json(ab);
         }
+        public IActionResult GetSkills()
+        {
+            List<Skill> list=_db.skills.ToList();
+            return Json(list);
+        }
 
 
 
