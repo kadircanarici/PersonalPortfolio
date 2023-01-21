@@ -142,7 +142,14 @@
                             return `<a onClick="editAboutMe('${data}')" class="btn btn-info">Düzenle</a>`;
                         }
                     }
-                ]
+                ],
+                "initComplete": function (settings, json) {
+                    $('table td').css({
+                        'max-width': '150px',
+                        'overflow': 'hidden',
+                        'text-overflow': 'ellipsis',
+                        'white-space': 'nowrap'
+                    });}
             }
         );
         function editAboutMe(id) {
