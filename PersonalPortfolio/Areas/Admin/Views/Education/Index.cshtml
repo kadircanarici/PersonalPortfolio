@@ -9,12 +9,12 @@
 <div class="row">
     <div class="col-12">
         <div class="page-title-box d-flex align-items-center justify-content-between">
-            <h4 class="mb-0">Intro</h4>
+            <h4 class="mb-0">Education</h4>
 
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="javascript: void(0);">Settings</a></li>
-                    <li class="breadcrumb-item active">Intro Settings</li>
+                    <li class="breadcrumb-item active">Education And Course</li>
                 </ol>
             </div>
 
@@ -28,18 +28,17 @@
         <div class="card">
             <div class="card-body">
 
-
+                <button type="button" id="yeniKayit" class="btn btn-success waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#modal">Yeni Ekle</button>
                 <p class="card-title-desc">
-                    Bu ekranda Introyu düzenleyeblirsiniz.
+                    Bu ekranda eğitimleri düzenleyeblirsiniz.
                 </p>
 
                 <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                     <thead>
                         <tr>
-                            <th>TitleStart</th>
-                            <th>TitleMidLine</th>
-                            <th>TitleEnd</th>
-                            <th>Content</th>
+                            <th>Year</th>
+                            <th>Education</th>
+                            <th>Description</th>
                             <th>İşlemler</th>
 
                         </tr>
@@ -68,27 +67,21 @@
             </div>
             <div class="modal-body">
                 <div class="mb-3 row">
-                    <label for="example-text-input" class="col-md-4 col-form-label">txtTitleStart</label>
+                    <label for="txtEducationYear" class="col-md-4 col-form-label">txtEducationYear</label>
                     <div class="col-md-8">
-                        <input class="form-control" type="text" placeholder="txtTitleStart" id="txtTitleStart">
+                        <input class="form-control" type="text" placeholder="txtEducationYear" id="txtEducationYear">
                     </div>
                 </div>
                 <div class="mb-3 row">
-                    <label for="example-text-input" class="col-md-4 col-form-label"><u>txtTitleMidLine</u></label>
+                    <label for="txtEducationName" class="col-md-4 col-form-label">txtEducationName</label>
                     <div class="col-md-8">
-                        <input class="form-control" type="text" placeholder="txtTitleMidLine" id="txtTitleMidLine">
+                        <input class="form-control" type="text" placeholder="txtEducationName" id="txtEducationName">
                     </div>
                 </div>
                 <div class="mb-3 row">
-                    <label for="example-text-input" class="col-md-4 col-form-label">txtTitleEnd</label>
+                    <label for="txtEducationDescription" class="col-md-4 col-form-label">txtEducationDescription</label>
                     <div class="col-md-8">
-                        <input class="form-control" type="text" placeholder="txtTitleEnd" id="txtTitleEnd">
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Content</label>
-                    <div>
-                        <textarea required class="form-control" rows="5" id="txtContent"></textarea>
+                        <input class="form-control" type="text" placeholder="txtEducationDescription" id="txtEducationDescription">
                     </div>
                 </div>
 
@@ -123,60 +116,115 @@
             {
                 lengthChange: !1,
                 buttons: ["copy", "excel", "pdf", "colvis"],
-                ajax: "@Url.Action("GetAll","Intro")",
+                ajax: "@Url.Action("GetAll","Education")",
                 columns: [
-                    { data: 'titleStart' },
-                    { data: 'titleMidLine' },
-                    { data: 'titleEnd' },
-                    { data: 'content' },
+                    { data: 'year' },
+                    { data: 'name' },
+                    { data: 'description' },
+
+
                     {
                         data: 'id',
                         render: function (data, type) {
-                            return `<a onClick="editIntro('${data}')" class="btn btn-info">Düzenle</a>`;
+                            return `<a onClick="editEducation('${data}')" class="btn btn-info">Düzenle</a><a onClick="deleteEducation('${data}')" class="btn btn-danger">Sil</a>`;
                         }
                     }
-                ],
-                "initComplete": function (settings, json) {
-                    $('table td').css({
-                        'max-width': '150px',
-                        'overflow': 'hidden',
-                        'text-overflow': 'ellipsis',
-                        'white-space': 'nowrap'
-                    });
-                }
+                ]
             }
         );
-        function editIntro(id) {
+        function deleteEducation(id) {
+            Swal.fire({
+                title: 'Silmek istediginizden emin misiniz ?',
+                showCancelButton: true,
+                confirmButtonText: 'Evet'
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+
+                    $.post({
+                        data: { id: id },
+                        url: "@Url.Action("Delete","Education")",
+                        success: function (res) {
+
+                            dataTable.ajax.reload();
+                            toastr.success('Yetenek Silinmiştir.', 'Silindi');
+                        }
+                    })
+
+                }
+            });
+        }
+
+        $("#yeniKayit").click(function () {
+
+
+            $("#btnEdit").off();
+            $("#btnEdit").click(AddEducation);
+            $("#btnEdit").text("Ekle");
+
+        });
+        function AddEducation() {
             $("#modal").modal('show');
-            console.log("edit e tıklandı");
-            var veri = { id: id, imagePath: '' };
+            var veri = {
+
+                year: $("#txtEducationYear").val(),
+                name: $("#txtEducationName").val(),
+                description: $("#txtEducationDescription").val(),
+
+            }
+            console.log("veri :" + veri);
+            $.post({
+                data: veri,
+                url: "@Url.Action("Add","Education")",
+                success: function (res) {
+                    $("#modal").modal('hide'),
+                        toastr.success('yeni yetenek basarıyla eklenmiştir.', 'Başarılı');
+                    dataTable.ajax.reload();
+                    $("#txtEducationYear").val('');
+                    $("#txtEducationName").val('');
+                    $("#txtEducationDescription").val('');
+
+                }
+            })
+
+        }
+        function editEducation(id) {
+            $("#editEducation").off();
+            $("#modal").modal('show');
+            var veri = {
+                id: id,
+
+            };
             $.ajax({
                 type: "POST",
                 data: veri,
-                url: "@Url.Action("GetByID","Intro")",
+                url: "@Url.Action("GetByID","Education")",
                 success: function (res) {
-                    $("#txtTitleStart").val(res.titleStart);
-                    console.log(res.id);
-                    $("#txtTitleMidLine").val(res.titleMidLine);
-                    $("#txtTitleEnd").val(res.titleEnd);
-                    $("#txtContent").val(res.content);
+                    $("#txtEducationYear").val(res.year);
+                    $("#txtEducationName").val(res.name);
+                    $("#txtEducationDescription").val(res.description);
+
+
+                    $("#btnEdit").text("Güncelle");
+                    $("#btnEdit").off();
+
                     $("#btnEdit").click(function () {
                         var veri =
                         {
                             id: id,
-                            titleStart: $("#txtTitleStart").val(),
-                            titleMidLine: $("#txtTitleMidLine").val(),
-                            titleEnd: $("#txtTitleEnd").val(),
-                            content: $("#txtContent").val(),
+                            year: $("#txtEducationYear").val(),
+                            name: $("#txtEducationName").val(),
+                            description: $("#txtEducationDescription").val(),
+
                         };
-                        console.log(veri);
+
                         $.ajax({
                             type: "POST",
-                            url: "@Url.Action("Edit","Intro")",
+                            url: "@Url.Action("Edit","Education")",
                             data: veri,
                             success: function (res) {
                                 dataTable.ajax.reload();
-                                toastr.success('Intro basarıyla güncellendi', 'Düzenlendi !');
+                                toastr.success('Yetenek basarıyla güncellendi', 'Düzenlendi !');
                                 $("#modal").modal('hide');
                             }
                         });

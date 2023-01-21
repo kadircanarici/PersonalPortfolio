@@ -1,74 +1,71 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PersonalPortfolio.Data;
-using PersonalPortfolio.Data.Migrations;
 using PersonalPortfolio.Models;
-using System.Data;
-using System.Linq;
 
 namespace PersonalPortfolio.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class SkillController : Controller
+    public class EducationController : Controller
     {
         private readonly ApplicationDbContext _db;
 
-        public SkillController(ApplicationDbContext db)
+        public EducationController(ApplicationDbContext db)
         {
             _db = db;
         }
-        [Authorize(Roles = "Admin")]
 
         public IActionResult Index()
         {
             return View();
         }
-        [Authorize(Roles = "Admin")]
-
+        [Authorize(Roles ="Admin")]
         public IActionResult GetAll()
         {
-            return Json(new { data = _db.skills.Where(s => s.IsActive == true && s.IsDeleted == false).ToList() }); 
+            return Json(new {data= _db.Education.Where(e=>e.IsActive==true && e.IsDeleted==false).ToList() });
         }
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles ="Admin")]
         [HttpPost]
-        public IActionResult Add(Skill skill)
+        public IActionResult Add(Education education)
         {
-            _db.skills.Add(skill);
+            _db.Education.Add(education);
             _db.SaveChanges();
-            return Json(skill);
+            return Json(education);
         }
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult GetById(Guid id)
         {
-            Skill skill = _db.skills.Find(id);
-            return Json(skill);
+            Education education = _db.Education.Find(id);
+            return Json(education);
         }
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public IResult Edit(Skill skill)
+        public IResult Edit(Education education)
         {
-            Skill asil = _db.skills.Find(skill.Id);
-            asil.Column = skill.Column;
-            asil.Name = skill.Name;
-            _db.skills.Update(asil);
+            Education asil = _db.Education.Find(education.Id);
+            asil.Year = education.Year;
+            asil.Name = education.Name;
+            asil.Description = education.Description;
+            _db.Education.Update(asil);
             _db.SaveChanges();
-
             return Results.Ok("basarılı");
+
         }
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult Delete(Guid id)
         {
-            Skill skll = _db.skills.Find(id);
-            if(skll!=null)
+            Education education = _db.Education.Find(id);
+            if(education!=null)
             {
-                skll.IsDeleted = true;
-                _db.skills.Update(skll);
+                education.IsDeleted=true;
                 _db.SaveChanges();
 
             }
-            return Json(skll);
+            return Json(education);
         }
+
+
     }
 }
