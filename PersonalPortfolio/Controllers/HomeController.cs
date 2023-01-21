@@ -25,7 +25,7 @@ namespace PersonalPortfolio.Controllers
         }
         public IActionResult GetSkills()
         {
-            List<Skill> list=_db.skills.ToList();
+            List<Skill> list=_db.skills.Where(s=>s.IsDeleted==false && s.IsActive==true).ToList();
             return Json(list);
         }
 
