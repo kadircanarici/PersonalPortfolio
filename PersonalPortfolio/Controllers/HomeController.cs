@@ -28,6 +28,11 @@ namespace PersonalPortfolio.Controllers
             List<Skill> list=_db.skills.Where(s=>s.IsDeleted==false && s.IsActive==true).ToList();
             return Json(list);
         }
+        public IActionResult GetEducations()
+        {
+            List<Education> educations = _db.Education.Where(e => e.IsDeleted == false && e.IsActive == true).ToList();
+            return Json(educations);
+        }
 
 
 

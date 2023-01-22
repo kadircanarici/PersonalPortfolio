@@ -23,14 +23,40 @@ $.ajax('Home/GetAboutMe', {
 
     }
 });
+function GetEducations() {
+    $.ajax('Home/GetEducations', {
+        type: "GET",
+        success: function (data) {
+
+            for (var item of data) {
+
+                $("#education").append(`
+                    <div class="row mt-4 mb-3">
+                        <div class="col-lg-3">
+                            <span class="custom-date-1 text-color-dark font-weight-medium" >${item.year}</span>
+                        </div>
+                        <div class="col-lg-8 mt-3 mt-lg-0">
+                            <p class="custom-font-1 text-8 font-weight-semi-bold text-color-dark mb-3" >${item.name}</p>
+                            <p class="text-4 font-weight-medium line-height-7 pe-lg-5" >${item.description}</p>
+                        </div>            
+                    </div>
+                `);
+
+            }
+
+        }
+    });
+};
+
 $(document).ready(function () {
     GetSkills();
+    GetEducations();
 });
 function GetSkills() {
     $.ajax('Home/GetSkills', {
         type: "GET",
         success: function (data) {
-            console.log(data);
+
             for (var item of data) {
                 if (item.column == 1) { $("#skillsCol1").append(` <li>${item.name}</li>`) }
                 else if (item.column == 2) { $("#skillsCol2").append(` <li>${item.name}</li>`) }
